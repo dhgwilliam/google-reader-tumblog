@@ -22,7 +22,7 @@ get '/' do
 end
 
 get '/:key' do
-  @object = JSON.parse(redis.get(redis.keys("*tag:google.com,2005:reader/item/#{params[:key]}")))
+  @object = JSON.parse(redis.get(redis.keys("*tag:google.com,2005:reader/item/#{params[:key]}")[0]))
   if @object.has_key?("content")
     @item = @object.values_at("content")[0].values_at("content")[0]
   elsif @object.has_key?("summary")
