@@ -9,8 +9,9 @@ end
 
 get '/' do
   @object = JSON.parse(redis.get(redis.randomkey))
-  @item = @object.values_at("object")[0].values_at("content")[0]
-  @title = @object.values_at("object")[0].values_at("displayName")[0]
+  @item = @object.values_at("content")[0].values_at("content")[0]
+  @title = @object.values_at("title")[0]
+  @url = @object.values_at("alternate")[0][0].values_at("href")[0]
   haml :index    
 end
 
