@@ -7,11 +7,18 @@
   %body
     #content.container-12
       #header.grid-8.prefix-2
+        %a{:href => "/"}
+          home
+        \-
+        %a{:href => "/#{@id}"}
+          permalink
+        \-
+        %a{:href => "/random"}
+          random
         %h1 
           %a{:href => @url}
             = @title
       #body.grid-8.prefix-2
-        = @item
-        #permalink
-          %a{:href => "http://blog.davidgwilliam.com/#{@id}"}
-            permalink
+        #article
+          = @item
+        #footer
