@@ -1,11 +1,13 @@
 require 'json'
 require 'redis'
 
+pwd = File.dirname(__FILE__)
+# initialize redis connection
 redis = Redis.new
 
 google_string = String.new
 
-google_snippet = File.readlines("/home/david/reader.json")
+google_snippet = File.readlines(pwd + "/reader.json")
 google_snippet.each { |lines| google_string = google_string.chomp + lines.chomp }
 google_json = JSON.parse(google_string)
 item_array = google_json[google_json.keys[0]]

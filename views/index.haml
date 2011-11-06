@@ -1,9 +1,13 @@
 %html
+  %link{:href => "/css/main.css", :rel => "stylesheet", :type => "text/css"}
+  %link{:href => "/css/960.css", :rel => "stylesheet", :type => "text/css"}
   %head
     %title 
       = @title
   %body
-    %h1 
-      = @title
-    .body
-      = @item
+    #content.container-12
+      #header.grid-8.prefix-2
+        %h1 
+          = @title
+      #body.grid-8.prefix-2
+        = @item
