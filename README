@@ -1,4 +1,29 @@
 google reader shared items import and display script based on sinatra and redis
 
 
-requires haml, sass, redis, json
+requires haml, sass, redis, json, bundler, sinatra (obv)
+
+STEP 0
+- set up passenger and a new vhost for your tumblog
+- set up all required gems
+  $ bundle install
+
+STEP 1
+Download your Google Reader shared items JSON in Google format
+- http://reader.google.com
+- click on the gear in the upper right hand corner and select "Reader settings"
+- click on Import/Export tab
+- Download the "Items you have shared" *READER JSON* (this is very important)
+- save in the same folder as the parse.rb script
+
+STEP 2
+- once redis is set up, confirm the json variable has the correct filename, then run
+  $ ruby parse.rb
+- this may take a little while depending on the volume of your shares
+
+STEP 3
+- if passenger isn't set up properly, I can wait
+- force passenger to reload the code
+  $ touch tmp/restart.txt
+
+I don't know, does this work for you?
