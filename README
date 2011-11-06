@@ -1,0 +1,4 @@
+google reader shared items import and display script based on sinatra and redis
+
+
+requires haml, sass, redis, json
