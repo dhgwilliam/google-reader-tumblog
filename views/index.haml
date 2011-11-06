@@ -8,6 +8,10 @@
     #content.container-12
       #header.grid-8.prefix-2
         %h1 
-          = @title
+          %a{:href => @url}
+            = @title
       #body.grid-8.prefix-2
         = @item
+        #permalink
+          %a{:href => "http://blog.davidgwilliam.com/#{@id}"}
+            permalink
