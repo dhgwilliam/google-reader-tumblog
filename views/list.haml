@@ -1,0 +1,29 @@
+%html
+  %link{:href => "/css/main.css", :rel => "stylesheet", :type => "text/css"}
+  %link{:href => "/css/960.css", :rel => "stylesheet", :type => "text/css"}
+  %head
+    %title david's shared items
+  %body
+    .clear
+    #content.container-12
+      #header.grid-8.prefix-2
+        %a{:href => "/"} home
+        \-
+        %a{:href => "/random"} random
+      #body.grid-8.prefix-2
+        - 0.upto(9) do |x|
+        - @article_id = @article_array[x]
+        - @article = get_article(@article_id)
+          .title
+            %h1 
+              %a{:href => @article.values_at("url")[0]}= @article.values_at("title")[0]
+          .article= @article.values_at("item")[0]
+          .article_footer
+            %a{:href => "/#{@article.values_at("id")[0]}" } permalink
+          %hr
+      #footer.grid-2.prefix-8
+        - if @start >= 10
+          %a{:href => "/list/#{@start-10}"} later
+        - else
+          %a{:href => "/"} later
+        %a{:href => "/list/#{@start+10}"} earlier

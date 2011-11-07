@@ -9,12 +9,10 @@ before do
 end
 
 get '/' do
-  @object = get_article((redis.keys("*reader/item/*").sort { |x,y| y <=> x }.take(1)[0]))
-  @item = @object.values_at("item")[0]
-  @title = @object.values_at("title")[0]
-  @url = @object.values_at("url")[0]
-  @id = @object.values_at("id")[0]
-  haml :index    
+  @start = 0
+  @finish = @start + 9 
+  @article_array = redis.keys("*reader/item/*").sort { |x,y| y <=> x }.slice(0..9)
+  haml :list
 end
 
 get '/random' do
@@ -28,6 +26,17 @@ get '/random' do
   @url = @object.values_at("alternate")[0][0].values_at("href")[0]
   @id = @object.values_at("id")[0].scan(/[a-zA-Z0-9]+$/)[0]
   haml :index    
+end
+
+get '/list/:counter' do
+  @start = params[:counter].to_i
+  @finish = @start + 9 
+  @article_array = redis.keys("*reader/item/*").sort { |x,y| y <=> x }
+  if @finish > @article_array.count
+    @finish = @article_array.count
+  end
+  @article_array = @article_array.slice(@start..@finish)
+  haml :list
 end
 
 get '/:key' do

@@ -2,23 +2,18 @@
   %link{:href => "/css/main.css", :rel => "stylesheet", :type => "text/css"}
   %link{:href => "/css/960.css", :rel => "stylesheet", :type => "text/css"}
   %head
-    %title 
-      = @title
+    %title= @title
   %body
+    .clear
     #content.container-12
       #header.grid-8.prefix-2
-        %a{:href => "/"}
-          home
+        %a{:href => "/"} home
         \-
-        %a{:href => "/#{@id}"}
-          permalink
+        %a{:href => "/#{@id}"} permalink
         \-
-        %a{:href => "/random"}
-          random
-        %h1 
-          %a{:href => @url}
-            = @title
+        %a{:href => "/random"} random
       #body.grid-8.prefix-2
-        #article
-          = @item
-        #footer
+        %h1 
+          %a{:href => @url}= @title
+      #body.grid-8.prefix-2
+        #article= @item
