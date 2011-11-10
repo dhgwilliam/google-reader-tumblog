@@ -1,7 +1,32 @@
+GIT
+  remote: https://github.com/zquestz/omniauth-google-oauth2.git
+  revision: d391842191377f9642b326f05b74c282f8630dae
+  specs:
+    omniauth-google-oauth2 (0.1.4)
+      omniauth (~> 1.0)
+      omniauth-oauth2
+
 GEM
   remote: http://rubygems.org/
   specs:
+    addressable (2.2.6)
+    faraday (0.7.5)
+      addressable (~> 2.2.6)
+      multipart-post (~> 1.1.3)
+      rack (>= 1.1.0, < 2)
     haml (3.1.3)
+    hashie (1.2.0)
+    multi_json (1.0.3)
+    multipart-post (1.1.3)
+    oauth2 (0.5.1)
+      faraday (~> 0.7.4)
+      multi_json (~> 1.0.3)
+    omniauth (1.0.0)
+      hashie (~> 1.2)
+      rack
+    omniauth-oauth2 (1.0.0)
+      oauth2 (~> 0.5.0)
+      omniauth (~> 1.0)
     rack (1.3.5)
     rack-protection (1.1.4)
       rack
@@ -18,6 +43,7 @@ PLATFORMS
 
 DEPENDENCIES
   haml
+  omniauth-google-oauth2!
   redis
   sass
   sinatra

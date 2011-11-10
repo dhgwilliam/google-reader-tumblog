@@ -12,6 +12,10 @@
         %a{:href => "/popular"} popular
         \-
         %a{:href => "/random"} random
+        \-
+        %a{:href => "/auth/google_oauth2"} Sign in with Google
+        \-
+        = "Welcome #{@user}"
       #body.grid-8.prefix-2
         - 0.upto(9) do |x|
         - @article_id = @article_array[x]

@@ -12,7 +12,28 @@ get '/' do
   @start = 0
   @finish = @start + 9 
   @article_array = redis.keys("*reader/item/*").sort { |x,y| y <=> x }.slice(0..9)
+  if session.include?("user")
+    @user = session['user']
+  else
+    @user = "Guest"
+  end
   haml :list
+end
+
+get '/auth/:provider/callback' do
+  content_type 'text/plain'
+  $auth_hash = request.env['omniauth.auth'].to_hash rescue "No Data"
+  session['user'] ||= $auth_hash.values_at("uid")[0]
+  redirect to(request.env['omniauth.origin'])
+end
+
+get '/auth/failure' do
+  content_type 'text/plain'
+  request.env['omniauth.auth'].to_hash.inspect rescue "No Data"
+end
+
+get '/whoami' do
+  "You are #{session['user']}"
 end
 
 get '/random' do
@@ -95,6 +116,7 @@ helpers do
     redis = Redis.new
     redis.select 1
     redis.zincrby("zlikes", 1, key)
+    redis.zincrby($auth_user.to_s + ":zlikes", 1, key)
   end
 
   def unique_key(longkey)
