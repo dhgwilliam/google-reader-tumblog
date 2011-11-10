@@ -13,7 +13,7 @@
         \-
         %a{:href => "/random"} random
       #body.grid-8.prefix-2
-        - 0.upto(9) do |x|
+        - 0.upto(@article_array.count-1) do |x|
         - @article_id = @article_array[x]
         - @article = get_article(@article_id)
           .title
@@ -26,8 +26,3 @@
             %a{:href => "/like/#{@article.values_at("id")[0]}" } like
           %hr
       #footer.grid-2.prefix-8
-        - if @start >= 10
-          %a{:href => "/list/#{@start-10}"} later
-        - else
-          %a{:href => "/"} later
-        %a{:href => "/list/#{@start+10}"} earlier

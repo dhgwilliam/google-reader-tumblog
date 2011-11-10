@@ -25,7 +25,15 @@ get '/random' do
   @title = @object.values_at("title")[0]
   @url = @object.values_at("alternate")[0][0].values_at("href")[0]
   @id = @object.values_at("id")[0].scan(/[a-zA-Z0-9]+$/)[0]
-  haml :index    
+  haml :single    
+end
+
+get '/popular' do
+  @article_array = redis.zrevrange("zlikes", 0, -1)
+  @article_array.each do |shortkey|
+    @article_array[@article_array.index(shortkey)] = redis.keys("*#{shortkey}")[0]
+  end
+  haml :popular
 end
 
 get '/list/:counter' do
@@ -39,6 +47,11 @@ get '/list/:counter' do
   haml :list
 end
 
+get '/like/:key' do
+  like_article(params[:key])
+  redirect to("#{request.referrer}")
+end
+
 get '/:key' do
   @object = JSON.parse(redis.get(redis.keys("*tag:google.com,2005:reader/item/#{params[:key]}")[0]))
   if @object.has_key?("content")
@@ -49,8 +62,9 @@ get '/:key' do
   @title = @object.values_at("title")[0]
   @url = @object.values_at("alternate")[0][0].values_at("href")[0]
   @id = @object.values_at("id")[0].scan(/[a-zA-Z0-9]+$/)[0]
-  haml :index    
+  haml :single    
 end
+
 
 get "/css/:stylesheet.css" do
   content_type "text/css", :charset => "UTF-8"
@@ -61,7 +75,11 @@ helpers do
   def get_article(key)
     redis = Redis.new
     redis.select 1
-    @object = JSON.parse(redis.get("#{key}"))
+    if key.include?("reader")
+      @object = JSON.parse(redis.get("#{key}"))
+    else
+      @object = JSON.parse(redis.get(redis.keys("*#{key}")[0]))
+    end
     if @object.has_key?("content")
       @item = @object.values_at("content")[0].values_at("content")[0]
     elsif @object.has_key?("summary")
@@ -72,5 +90,16 @@ helpers do
     @id = @object.values_at("id")[0].scan(/[a-zA-Z0-9]+$/)[0]
     return { "item" => @item, "title" => @title, "url" => @url, "id" => @id}
   end
+
+  def like_article(key)
+    redis = Redis.new
+    redis.select 1
+    redis.zincrby("zlikes", 1, key)
+  end
+
+  def unique_key(longkey)
+    return longkey.slice(-16..-1)
+  end
+      
 
 end

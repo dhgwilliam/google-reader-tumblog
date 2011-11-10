@@ -9,11 +9,17 @@
       #header.grid-8.prefix-2
         %a{:href => "/"} home
         \-
+        %a{:href => "/popular"} popular
+        \-
         %a{:href => "/#{@id}"} permalink
         \-
         %a{:href => "/random"} random
+        \-
+        %a{:href => "/like/#{@id}"} like
       #body.grid-8.prefix-2
         %h1 
           %a{:href => @url}= @title
       #body.grid-8.prefix-2
         #article= @item
+  :javascript
+    function submitform() { document.forms["like"].submit(); }
