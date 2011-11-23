@@ -11,4 +11,6 @@ set :root,        root_dir
 set :app_file,    File.join(root_dir, 'index.rb')
 disable :run
 
+Encoding.default_external = Encoding::UTF_8
+
 run Sinatra::Application
