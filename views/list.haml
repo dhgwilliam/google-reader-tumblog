@@ -3,6 +3,8 @@
   %link{:href => "/css/960.css", :rel => "stylesheet", :type => "text/css"}
   %head
     %title david's shared items
+    :javascript 
+      if (window.location.hash == '#_=_')window.location.hash = '';
   %body
     .clear
     #content.container-12
@@ -12,6 +14,12 @@
         %a{:href => "/popular"} popular
         \-
         %a{:href => "/random"} random
+        - if session["access_token"].nil?
+          \-
+          %a{:href => "#{@oauth_url}"} login
+        - else
+          \-
+          %a{:href => "/logout"}= "logout " + @uid
       #body.grid-8.prefix-2
         - 0.upto(9) do |x|
         - @article_id = @article_array[x]

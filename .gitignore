@@ -1,3 +1,4 @@
 .bundle
 *.swp
 .sass-cache
+config.rb

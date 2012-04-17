@@ -1,4 +1,10 @@
 require 'json'
+require 'koala'
+require './config'
+
+OAUTH = Koala::Facebook::OAuth.new(API_KEY, APP_SECRET, CALLBACK_URL)
+
+enable :sessions
 
 redis = Redis.new
 redis.select 1
@@ -12,7 +18,29 @@ get '/' do
   @start = 0
   @finish = @start + 9 
   @article_array = redis.keys("*reader/item/*").sort { |x,y| y <=> x }.slice(0..9)
+  @oauth_url = OAUTH.url_for_oauth_code(:permissions => "publish_stream")
+  unless session["access_token"].nil?
+    GRAPH = Koala::Facebook::API.new(session["access_token"])
+    @uid = GRAPH.get_object("me")["first_name"]
+  end
   haml :list
+end
+
+get '/login' do
+  if params[:code]
+     session["code"] = params[:code]
+     session["access_token"] = OAUTH.get_access_token(session["code"])
+  end
+  redirect to('/')
+end
+
+get '/logout' do
+  session["access_token"] = nil
+  redirect to('/')
+end
+
+get '/post' do
+  
 end
 
 get '/random' do
@@ -70,6 +98,7 @@ get "/css/:stylesheet.css" do
   content_type "text/css", :charset => "UTF-8"
   sass :"css/#{params[:stylesheet]}"
 end 
+
 
 helpers do
   def get_article(key)
